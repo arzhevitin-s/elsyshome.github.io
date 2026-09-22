@@ -1,4 +1,63 @@
 
+const METRIKA_ID=112936089;
+let metrikaReady=false;
+
+function loadMetrika(){
+  if(metrikaReady || window.ym) return;
+  (function(m,e,t,r,i,k,a){
+    m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();
+    for(let j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r)return;}
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+  })(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');
+
+  ym(METRIKA_ID,'init',{
+    clickmap:true,
+    trackLinks:true,
+    accurateTrackBounce:true,
+    webvisor:true
+  });
+  metrikaReady=true;
+}
+
+function getUtm(){
+  const p=new URLSearchParams(location.search);
+  return {
+    utm_source:p.get('utm_source')||'',
+    utm_medium:p.get('utm_medium')||'',
+    utm_campaign:p.get('utm_campaign')||'',
+    utm_content:p.get('utm_content')||'',
+    utm_term:p.get('utm_term')||''
+  };
+}
+const utm=getUtm();
+if(Object.values(utm).some(Boolean)) localStorage.setItem('elsys_utm',JSON.stringify(utm));
+
+function goal(name,params={}){
+  if(window.ym && metrikaReady){
+    ym(METRIKA_ID,'reachGoal',name,{...params,...state,...utm});
+  }
+}
+
+function setupAnalyticsConsent(){
+  const banner=document.getElementById('cookieBanner');
+  const decision=localStorage.getItem('elsys_analytics_consent');
+  if(decision==='yes'){ loadMetrika(); }
+  else if(decision!=='no'){ banner.hidden=false; }
+
+  document.getElementById('cookieAccept').addEventListener('click',()=>{
+    localStorage.setItem('elsys_analytics_consent','yes');
+    banner.hidden=true;
+    loadMetrika();
+    setTimeout(()=>goal('analytics_consent'),250);
+  });
+  document.getElementById('cookieDecline').addEventListener('click',()=>{
+    localStorage.setItem('elsys_analytics_consent','no');
+    banner.hidden=true;
+  });
+}
+
+
 const state={kind:'',concept:'',fixture:''};
 const map={
  'Светлая|Ванна|Светлая фурнитура':['assets/bath_1.jpg','559 000 ₽'],
@@ -21,6 +80,7 @@ function showStep(n){
  document.getElementById('progressBar').style.width=(n*33.33)+'%';
 }
 function finish(){
+ goal('quiz_complete');
  document.querySelectorAll('.quiz-step').forEach(x=>x.classList.remove('active'));
  document.getElementById('progressBar').style.width='100%';
  const key=`${state.concept}|${state.kind}|${state.fixture}`;
@@ -40,6 +100,9 @@ document.querySelectorAll('.choice').forEach(btn=>{
    parent.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));
    btn.classList.add('selected');
    const step=Number(parent.dataset.step);
+   if(step===1) goal('quiz_kind',{choice:v});
+   if(step===2) goal('quiz_style',{choice:v});
+   if(step===3) goal('quiz_fixture',{choice:v});
    if(step<3) setTimeout(()=>showStep(step+1),120); else setTimeout(finish,120);
  });
 });
@@ -59,9 +122,29 @@ function saveDemo(formId,noteId,type){
    e.preventDefault();
    const fd=new FormData(form),obj={type,...state};
    for(const [k,v] of fd.entries()) obj[k]=(v && typeof v==='object' && 'name' in v)?v.name:v;
-   localStorage.setItem('elsys_'+type+'_'+Date.now(),JSON.stringify(obj));
+   localStorage.setItem('elsys_'+type+'_'+Date.now(),JSON.stringify({...obj,utm}));
+   goal(type==='booking'?'survey_submit':'remote_submit',{contact:obj.contact||'',visit_date:obj.visit_date||''});
    document.getElementById(noteId).textContent='Демо-заявка сохранена. В боевой версии данные уйдут в CRM/обработчик.';
  });
 }
 saveDemo('bookingForm','bookingNote','booking');
 saveDemo('remoteForm','remoteNote','remote');
+
+let quizStarted=false;
+function markQuizStart(){
+  if(quizStarted) return;
+  quizStarted=true;
+  goal('quiz_start');
+}
+document.querySelectorAll('a[href="#quiz"], .choice').forEach(el=>el.addEventListener('click',markQuizStart,{once:true}));
+
+document.getElementById('bookVisit').addEventListener('click',()=>goal('survey_click'));
+document.getElementById('remoteOffer').addEventListener('click',()=>goal('remote_click'));
+
+document.querySelectorAll('a[href^="tel:"]').forEach(a=>a.addEventListener('click',()=>goal('phone_click')));
+document.querySelectorAll('a[href*="max.ru/u/"]').forEach(a=>a.addEventListener('click',()=>goal('max_click')));
+document.querySelectorAll('a[href*="max.ru/channel_"]').forEach(a=>a.addEventListener('click',()=>goal('max_channel_click')));
+
+document.getElementById('visitDate').addEventListener('change',e=>goal('date_selected',{date:e.target.value}));
+
+setupAnalyticsConsent();
