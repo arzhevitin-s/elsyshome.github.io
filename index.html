@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Готовая ванная под ключ — выберите свой вариант</title>
+<meta name="description" content="Соберите свою готовую ванную за 30 секунд. Ванна — 559 000 ₽, душ — 599 000 ₽. Затем выберите дату технического замера.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body id="top">
+<div class="brandbar">
+  <a class="brand" href="#top" aria-label="ЭЛСИС ХОУМ">
+    <svg class="brand-logo" viewBox="0 0 360 160" role="img" aria-label="ЭЛСИС ХОУМ">
+      <path d="M28 64 L180 14 L332 64 L332 140 L28 140 Z" fill="#3d4443" stroke="#2f7f3f" stroke-width="6"/>
+      <path d="M40 67 L180 24 L320 67" fill="none" stroke="#ffffff" stroke-width="5"/>
+      <text x="180" y="92" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="54" font-weight="800">ЭЛСИС</text>
+      <line x1="55" y1="116" x2="120" y2="116" stroke="#9bd16a" stroke-width="6"/>
+      <text x="180" y="126" text-anchor="middle" fill="#9bd16a" font-family="Arial, sans-serif" font-size="34" font-weight="800">ХОУМ</text>
+      <line x1="240" y1="116" x2="305" y2="116" stroke="#9bd16a" stroke-width="6"/>
+    </svg>
+  </a>
+  <div class="brand-actions">
+      <a class="brand-phone" href="tel:+79824959248">+7 982 495-92-48</a>
+      <a class="brand-max" href="https://max.ru/u/f9LHodD0cOJQfZjkRGlODoUqg65HvUC6GfGzyRdVkpp2EzDWxlL0d6VNqcQ" target="_blank" rel="noopener">MAX</a><a class="brand-channel" href="https://max.ru/channel_elsyshome" target="_blank" rel="noopener">Канал</a>
+      <a class="brand-cta" href="#quiz">Собрать ванную</a>
+    </div>
+</div>
+
+<header class="hero">
+  <div class="wrap hero-grid-v5">
+    <div>
+      <div class="eyebrow">ЭЛСИС ХОУМ · ГОТОВАЯ ВАННАЯ</div>
+      <h1>Соберите свою ванную за 30 секунд</h1>
+      <p class="lead">Выберите ванну или душ, цветовую концепцию и фурнитуру. Сразу увидите готовый вариант и фиксированную цену для стандартного объекта.</p>
+      <div class="prices">
+        <div><span>С ванной</span><strong>559 000 ₽</strong></div>
+        <div><span>С душем</span><strong>599 000 ₽</strong></div>
+      </div>
+      <a class="cta" href="#quiz">Собрать свою ванную</a>
+      <p class="fine">Базовый срок — 30 календарных дней. Финальные цена и срок подтверждаются после технического замера.</p>
+    </div>
+    <img class="hero-img" src="assets/bath_3.jpg" alt="Готовая ванная ELSYS">
+  </div>
+</header>
+
+<main>
+<section class="quiz-section" id="quiz">
+  <div class="wrap">
+    <div class="eyebrow">КОНСТРУКТОР</div>
+    <h2>Выберите то, что подходит вам</h2>
+    <div class="quiz-progress"><span id="progressBar"></span></div>
+
+    <div class="quiz-step active" data-step="1">
+      <h3>1. Что вам подходит?</h3>
+      <div class="choice-grid two-choice">
+        <button class="choice" data-key="kind" data-value="Ванна"><img src="assets/bath_3.jpg" alt="Ванна"><strong>Ванна</strong><span>559 000 ₽</span></button>
+        <button class="choice" data-key="kind" data-value="Душ"><img src="assets/shower_3.jpg" alt="Душ"><strong>Душ</strong><span>599 000 ₽</span></button>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="2">
+      <h3>2. Какая атмосфера вам ближе?</h3>
+      <div class="choice-grid three-choice">
+        <button class="choice" data-key="concept" data-value="Светлая"><img src="assets/bath_1.jpg"><strong>Светлая</strong><span>Чистая и воздушная</span></button>
+        <button class="choice" data-key="concept" data-value="Тёплая"><img src="assets/bath_3.jpg"><strong>Тёплая</strong><span>Бежево-серая, с деревом</span></button>
+        <button class="choice" data-key="concept" data-value="Тёмная"><img src="assets/bath_5.jpg"><strong>Тёмная</strong><span>Графитовая и контрастная</span></button>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="3">
+      <h3>3. Какие акценты?</h3>
+      <div class="choice-grid two-choice">
+        <button class="choice simple-choice" data-key="fixture" data-value="Светлая фурнитура"><strong>Светлая фурнитура</strong><span>Хром / светлый металл</span></button>
+        <button class="choice simple-choice dark-choice" data-key="fixture" data-value="Тёмная фурнитура"><strong>Тёмная фурнитура</strong><span>Чёрный / графит</span></button>
+      </div>
+    </div>
+
+    <div class="quiz-result" id="quizResult">
+      <div class="result-grid">
+        <img id="resultImage" src="assets/bath_3.jpg" alt="Ваш вариант">
+        <div>
+          <div class="eyebrow">ВАШ ВАРИАНТ</div>
+          <h3 id="resultTitle"></h3>
+          <div class="result-price" id="resultPrice"></div>
+          <p>Для стандартного объекта в цену входят работы, материалы, сантехника, комплектация, доставка, вывоз мусора и уборка.</p>
+          <div class="result-actions">
+            <button class="cta" id="bookVisit">Выбрать дату замера</button>
+            <button class="secondary" id="remoteOffer">Получить предложение без выезда</button>
+          </div>
+          <button class="text-btn" id="restartQuiz">Изменить выбор</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="proof-section">
+  <div class="wrap">
+    <div class="eyebrow">РЕАЛЬНЫЕ РАБОТЫ ELSYS</div>
+    <h2>Не только визуалы. Это мы уже делаем в реальных квартирах.</h2>
+    <p class="proof-intro">
+      Новые коллекции на сайте — стандартизированный продукт. Ниже — реальные объекты ELSYS:
+      они отличаются по дизайну и планировке, но показывают фактическое качество отделки,
+      сантехнических узлов, ванн и душевых решений.
+    </p>
+
+    <div class="proof-feature">
+      <div class="proof-feature-image"><img src="assets/work_01.jpg" alt="Реальная тёплая ванная ELSYS"></div>
+      <div class="proof-feature-copy">
+        <span>Реальный объект</span>
+        <h3>Тёплая ванная с крупноформатной отделкой</h3>
+        <p>По уровню материалов и визуальной логике этот объект ближе всего к новому продукту «Готовая ванная».</p>
+      </div>
+    </div>
+
+    <div class="proof-grid proof-grid-v6">
+      <figure><img src="assets/work_02.jpg" alt="Реальная ванная с чёрной фурнитурой"><figcaption><b>Ванна + тёмная фурнитура</b><span>Реальный объект ELSYS</span></figcaption></figure>
+      <figure><img src="assets/work_03.jpg" alt="Реальная душевая зона"><figcaption><b>Стекло + готовый поддон</b><span>Реальный объект ELSYS</span></figcaption></figure>
+      <figure><img src="assets/work_04.jpg" alt="Светло-серая ванная"><figcaption><b>Светло-серая концепция</b><span>Реальный объект ELSYS</span></figcaption></figure>
+      <figure><img src="assets/work_05.jpg" alt="Серая ванная"><figcaption><b>Графитовая концепция</b><span>Реальный объект ELSYS</span></figcaption></figure>
+      <figure><img src="assets/work_06.jpg" alt="Реальный душевой узел"><figcaption><b>Душевой узел крупным планом</b><span>Реальный объект ELSYS</span></figcaption></figure>
+    </div>
+
+    <div class="proof-note">
+      <strong>Что здесь важно:</strong>
+      рендеры показывают, какой результат можно выбрать; реальные фотографии подтверждают,
+      что мы умеем технически и качественно этот уровень реализовывать.
+    </div>
+  </div>
+</section>
+
+
+<section class="booking-section" id="booking">
+  <div class="wrap booking-grid">
+    <div>
+      <div class="eyebrow">ТЕХНИЧЕСКИЙ ЗАМЕР</div>
+      <h2>Выберите удобную дату</h2>
+      <p>На объекте мы сами снимем размеры, проверим коммуникации и вместе уточним расстановку. Телефон нужен только для согласования точного времени приезда.</p>
+      <div class="chosen-summary" id="bookingSummary"></div>
+    </div>
+    <form id="bookingForm" class="booking-form">
+      <label>Дата замера <em>обязательно</em><input type="date" id="visitDate" name="visit_date" required></label>
+      <label>Телефон <em>обязательно</em><input name="phone" type="tel" placeholder="+7 ..." required></label>
+      <fieldset><legend>Как связаться?</legend>
+        <label class="radio"><input type="radio" name="contact" value="Звонок" checked> Позвонить</label>
+        <label class="radio"><input type="radio" name="contact" value="MAX"> Написать в MAX</label>
+      </fieldset>
+      
+<label class="consent">
+  <input type="checkbox" name="pd_consent" required>
+  <span>Я даю <a href="consent.html" target="_blank">согласие на обработку персональных данных</a>
+  и ознакомлен(а) с <a href="privacy.html" target="_blank">Политикой конфиденциальности</a>.</span>
+</label>
+
+      <button class="cta full" type="submit">Забронировать дату замера</button>
+      <p class="note" id="bookingNote">Точное время согласуем после заявки.</p>
+    </form>
+  </div>
+</section>
+
+<section class="remote-section" id="remote">
+  <div class="wrap booking-grid">
+    <div>
+      <div class="eyebrow">БЕЗ ВЫЕЗДА</div>
+      <h2>Получить предварительное предложение удалённо</h2>
+      <p>Если пока не готовы к выезду специалиста, пришлите одну фотографию от входа и примерные размеры помещения.</p>
+      <div class="chosen-summary" id="remoteSummary"></div>
+    </div>
+    <form id="remoteForm" class="booking-form">
+      <label>Примерные размеры <em>обязательно</em><input name="size" placeholder="Например: 1,7 × 2,2 м, высота 2,5 м" required></label>
+      <label>Фото ванной от входа <em>обязательно</em><input name="photo" type="file" accept="image/*" required></label>
+      <label>Телефон <em>обязательно</em><input name="phone" type="tel" placeholder="+7 ..." required></label>
+      <fieldset><legend>Как связаться?</legend>
+        <label class="radio"><input type="radio" name="contact" value="Звонок" checked> Позвонить</label>
+        <label class="radio"><input type="radio" name="contact" value="MAX"> Написать в MAX</label>
+      </fieldset>
+      
+<label class="consent">
+  <input type="checkbox" name="pd_consent" required>
+  <span>Я даю <a href="consent.html" target="_blank">согласие на обработку персональных данных</a>
+  и ознакомлен(а) с <a href="privacy.html" target="_blank">Политикой конфиденциальности</a>.</span>
+</label>
+
+      <button class="cta full" type="submit">Получить предварительное предложение</button>
+      <p class="note" id="remoteNote">Финальная цена фиксируется после технической проверки объекта.</p>
+    </form>
+  </div>
+</section>
+
+<section class="contact-strip">
+  <div class="wrap contact-strip-grid">
+    <div>
+      <div class="eyebrow">СВЯЗАТЬСЯ НАПРЯМУЮ</div>
+      <h2>Есть вопрос до замера?</h2>
+      <p>Позвоните или откройте MAX. В MAX найдите нас по номеру <strong>+7 982 495-92-48</strong>.</p>
+    </div>
+    <div class="contact-buttons">
+      <a class="contact-phone" href="tel:+79824959248">Позвонить +7 982 495-92-48</a>
+      <a class="contact-max" href="https://max.ru/u/f9LHodD0cOJQfZjkRGlODoUqg65HvUC6GfGzyRdVkpp2EzDWxlL0d6VNqcQ" target="_blank" rel="noopener">Написать в MAX</a><a class="contact-channel" href="https://max.ru/channel_elsyshome" target="_blank" rel="noopener">Канал ЭЛСИС ХОУМ в MAX</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <div class="footer-brand">ЭЛСИС ХОУМ</div>
+      <div class="footer-product">Готовая ванная · MVP</div>
+    </div>
+    <div class="footer-contacts">
+      <a href="tel:+79824959248">+7 982 495-92-48</a>
+      <a href="https://max.ru/u/f9LHodD0cOJQfZjkRGlODoUqg65HvUC6GfGzyRdVkpp2EzDWxlL0d6VNqcQ" target="_blank" rel="noopener">MAX</a><a href="https://max.ru/channel_elsyshome" target="_blank" rel="noopener">Канал в MAX</a>
+    </div>
+    <div class="advertiser">
+      Рекламодатель: ООО «ЭЛСИС»<br>
+      ИНН 5911047500<br>
+      <a href="privacy.html">Политика конфиденциальности</a><br>
+      <a href="consent.html">Согласие на обработку персональных данных</a>
+    </div>
+  </div>
+  <div class="brand-note">Публичное название на сайте используется на русском языке: «ЭЛСИС ХОУМ».</div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
