@@ -169,7 +169,7 @@
     </div>
     <form id="remoteForm" class="booking-form">
       <label>Примерные размеры <em>обязательно</em><input name="size" placeholder="Например: 1,7 × 2,2 м, высота 2,5 м" required></label>
-      <label>Фото ванной от входа <em>обязательно</em><input name="photo" type="file" accept="image/*" required></label>
+      <label>Фото ванной от входа <span class="muted">(можно приложить; пока свяжемся и попросим отправить его в MAX)</span><input name="photo" type="file" accept="image/*"></label>
       <label>Телефон <em>обязательно</em><input name="phone" type="tel" placeholder="+7 ..." required></label>
       <fieldset><legend>Как связаться?</legend>
         <label class="radio"><input type="radio" name="contact" value="Звонок" checked> Позвонить</label>
@@ -225,127 +225,5 @@
 </footer>
 
 <script src="script.js"></script>
-
-<style>
-#elsysCookie{position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;max-width:960px;margin:auto;background:#fff;border:1px solid #d8ddd8;border-radius:14px;padding:14px 16px;box-shadow:0 12px 36px rgba(0,0,0,.18);font:14px/1.35 Arial,sans-serif;color:#303534}
-#elsysCookie[hidden]{display:none}
-#elsysCookie .row{display:flex;gap:14px;align-items:center;justify-content:space-between}
-#elsysCookie .buttons{display:flex;gap:8px;flex:0 0 auto}
-#elsysCookie button{padding:10px 14px;border-radius:9px;font-weight:700;cursor:pointer}
-#elsysCookie .ok{background:#2f7f3f;color:#fff;border:1px solid #2f7f3f}
-#elsysCookie .no{background:#fff;color:#303534;border:1px solid #cfd5d0}
-#elsysCookie a{color:#2f7f3f}
-@media(max-width:680px){#elsysCookie .row{display:block}#elsysCookie .buttons{margin-top:10px}#elsysCookie button{flex:1}}
-</style>
-
-<div id="elsysCookie" hidden>
-  <div class="row">
-    <div><strong>Статистика сайта</strong><br>
-    Используем Яндекс.Метрику для анализа работы конструктора.
-    <a href="privacy.html" target="_blank">Подробнее</a></div>
-    <div class="buttons">
-      <button class="ok" id="elsysCookieOk" type="button">Разрешить</button>
-      <button class="no" id="elsysCookieNo" type="button">Не разрешать</button>
-    </div>
-  </div>
-</div>
-
-<script>
-(function() {
-  const ID = 112936089;
-  let loaded = false;
-
-  function loadMetrika() {
-    if (loaded) return;
-    loaded = true;
-    (function(m,e,t,r,i,k,a) {
-      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-      m[i].l=1*new Date();
-      for (let j=0;j<document.scripts.length;j++) if(document.scripts[j].src===r) return;
-      k=e.createElement(t); a=e.getElementsByTagName(t)[0];
-      k.async=1; k.src=r; a.parentNode.insertBefore(k,a);
-    })(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');
-
-    ym(ID,'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
-  }
-
-  function goal(name, params) {
-    if (typeof ym === 'function' && loaded) {
-      ym(ID,'reachGoal',name,params || {});
-    }
-  }
-
-  function init() {
-    const banner = document.getElementById('elsysCookie');
-    const consent = localStorage.getItem('elsys_metrika_consent');
-
-    if (consent === 'yes') loadMetrika();
-    else if (consent !== 'no') banner.hidden = false;
-
-    document.getElementById('elsysCookieOk').addEventListener('click', function() {
-      localStorage.setItem('elsys_metrika_consent','yes');
-      banner.hidden = true;
-      loadMetrika();
-      setTimeout(function(){ goal('analytics_consent'); },500);
-    });
-
-    document.getElementById('elsysCookieNo').addEventListener('click', function() {
-      localStorage.setItem('elsys_metrika_consent','no');
-      banner.hidden = true;
-    });
-
-    let quizStarted = false;
-    document.querySelectorAll('a[href="#quiz"], .choice').forEach(function(el) {
-      el.addEventListener('click', function() {
-        if (!quizStarted) { quizStarted = true; goal('quiz_start'); }
-      });
-    });
-
-    document.querySelectorAll('.choice').forEach(function(el) {
-      el.addEventListener('click', function() {
-        const step = el.closest('.quiz-step');
-        if (!step) return;
-        const n = step.getAttribute('data-step');
-        const v = el.getAttribute('data-value') || '';
-        if (n === '1') goal('quiz_kind', {choice:v});
-        if (n === '2') goal('quiz_style', {choice:v});
-        if (n === '3') {
-          goal('quiz_fixture', {choice:v});
-          setTimeout(function(){ goal('quiz_complete'); },150);
-        }
-      });
-    });
-
-    const survey = document.getElementById('bookVisit');
-    if (survey) survey.addEventListener('click', function(){ goal('survey_click'); });
-
-    const remote = document.getElementById('remoteOffer');
-    if (remote) remote.addEventListener('click', function(){ goal('remote_click'); });
-
-    const date = document.getElementById('visitDate');
-    if (date) date.addEventListener('change', function(){ goal('date_selected',{date:date.value}); });
-
-    const booking = document.getElementById('bookingForm');
-    if (booking) booking.addEventListener('submit', function(){ goal('survey_submit'); });
-
-    const remoteForm = document.getElementById('remoteForm');
-    if (remoteForm) remoteForm.addEventListener('submit', function(){ goal('remote_submit'); });
-
-    document.querySelectorAll('a[href^="tel:"]').forEach(function(a) {
-      a.addEventListener('click', function(){ goal('phone_click'); });
-    });
-    document.querySelectorAll('a[href*="max.ru/u/"]').forEach(function(a) {
-      a.addEventListener('click', function(){ goal('max_click'); });
-    });
-    document.querySelectorAll('a[href*="max.ru/channel_"]').forEach(function(a) {
-      a.addEventListener('click', function(){ goal('max_channel_click'); });
-    });
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-})();
-</script>
-
 </body>
 </html>

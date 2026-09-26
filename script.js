@@ -116,19 +116,93 @@ document.getElementById('remoteOffer').onclick=()=>document.getElementById('remo
 const d=document.getElementById('visitDate');
 const now=new Date(),min=new Date(now),max=new Date(now); min.setDate(min.getDate()+1); max.setDate(max.getDate()+30);
 const iso=x=>x.toISOString().slice(0,10); d.min=iso(min); d.max=iso(max);
-function saveDemo(formId,noteId,type){
+
+const LEAD_ENDPOINT='https://script.google.com/macros/s/AKfycbwA7H2xlUhZ5lPc2hO2zXVVP8jqRdIhUDNDClCH6RBYhWS0SM6Sz2TKmFel5hoYwVls9A/exec';
+
+function getStoredUtm(){
+  try {
+    return JSON.parse(localStorage.getItem('elsys_utm') || '{}');
+  } catch(e) {
+    return {};
+  }
+}
+
+async function fileToBase64(file){
+  if(!file) return null;
+  return await new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(String(reader.result).split(',')[1] || '');
+    reader.onerror=reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function sendLead(formId,noteId,type){
  const form=document.getElementById(formId);
- form.addEventListener('submit',e=>{
+ form.addEventListener('submit',async e=>{
    e.preventDefault();
-   const fd=new FormData(form),obj={type,...state};
-   for(const [k,v] of fd.entries()) obj[k]=(v && typeof v==='object' && 'name' in v)?v.name:v;
-   localStorage.setItem('elsys_'+type+'_'+Date.now(),JSON.stringify({...obj,utm}));
-   goal(type==='booking'?'survey_submit':'remote_submit',{contact:obj.contact||'',visit_date:obj.visit_date||''});
-   document.getElementById(noteId).textContent='Демо-заявка сохранена. В боевой версии данные уйдут в CRM/обработчик.';
+
+   const note=document.getElementById(noteId);
+   const submit=form.querySelector('button[type="submit"]');
+   submit.disabled=true;
+   note.textContent='Отправляем заявку…';
+
+   try {
+     const fd=new FormData(form);
+     const storedUtm=getStoredUtm();
+     const obj={
+       type,
+       kind:state.kind || '',
+       style:state.concept || '',
+       fixture:state.fixture || '',
+       price:state.kind==='Ванна' ? '559000' : state.kind==='Душ' ? '599000' : '',
+       phone:String(fd.get('phone') || '').trim(),
+       contact:String(fd.get('contact') || ''),
+       visit_date:String(fd.get('visit_date') || ''),
+       dimensions:String(fd.get('size') || ''),
+       utm_source:utm.utm_source || storedUtm.utm_source || '',
+       utm_medium:utm.utm_medium || storedUtm.utm_medium || '',
+       utm_campaign:utm.utm_campaign || storedUtm.utm_campaign || '',
+       utm_content:utm.utm_content || storedUtm.utm_content || '',
+       utm_term:utm.utm_term || storedUtm.utm_term || '',
+       page_url:location.href,
+       submitted_at:new Date().toISOString()
+     };
+
+     const photo=fd.get('photo');
+     if(photo && photo instanceof File && photo.size>0){
+       // Сейчас серверная часть сохраняет основные данные заявки.
+       // Имя файла передаём в таблицу; сам файл подключим отдельным шагом.
+       obj.photo_name=photo.name;
+     }
+
+     await fetch(LEAD_ENDPOINT,{
+       method:'POST',
+       mode:'no-cors',
+       headers:{'Content-Type':'text/plain;charset=utf-8'},
+       body:JSON.stringify(obj)
+     });
+
+     goal(type==='booking'?'survey_submit':'remote_submit',{
+       contact:obj.contact,
+       visit_date:obj.visit_date
+     });
+
+     note.textContent=type==='booking'
+       ? 'Заявка отправлена. Свяжемся, чтобы согласовать точное время замера.'
+       : 'Заявка отправлена. Свяжемся для предварительного разбора.';
+     form.reset();
+   } catch(err) {
+     console.error(err);
+     note.textContent='Не удалось отправить заявку. Позвоните +7 982 495-92-48 или напишите в MAX.';
+   } finally {
+     submit.disabled=false;
+   }
  });
 }
-saveDemo('bookingForm','bookingNote','booking');
-saveDemo('remoteForm','remoteNote','remote');
+sendLead('bookingForm','bookingNote','booking');
+sendLead('remoteForm','remoteNote','remote');
+
 
 let quizStarted=false;
 function markQuizStart(){
